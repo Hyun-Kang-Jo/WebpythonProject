@@ -1,0 +1,96 @@
+<head>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{%url 'home'%}">Dingdong</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{%url 'write'%}">Write <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{%url 'portfolio'%}">notice</a>
+      </li>
+      <!--
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      -->
+      <li class="nav-item">
+        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">loginplz</a>
+      </li>
+    </ul>
+    <form>
+  <div class="form-row align-items-center">
+    <div class="col-sm-3 my-1">
+      <label class="sr-only" for="inlineFormInputName">Name</label>
+      <input type="text" class="form-control" id="inlineFormInputName" placeholder="Jane Doe">
+    </div>
+    <div class="col-sm-3 my-1">
+      <label class="sr-only" for="inlineFormInputGroupUsername">Username</label>
+      <div class="input-group">
+        <div class="input-group-prepend">
+          <div class="input-group-text">@</div>
+        </div>
+        <input type="text" class="form-control" id="inlineFormInputGroupUsername" placeholder="Username">
+      </div>
+    </div>
+    <div class="col-auto my-1">
+      <div class="form-check">
+        <input class="form-check-input" type="checkbox" id="autoSizingCheck2">
+        <label class="form-check-label" for="autoSizingCheck2">
+          Remember me
+        </label>
+      </div>
+    </div>
+    <div class="col-auto my-1">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+  </div>
+</form>
+  </div>
+</nav>
+
+<div class = "container jumbotron">
+    <h1>{{blog_detail.title}}</h1>
+    <p>{{blog_detail.pub_date}}</p>
+    <p>{% for photo in blog_detail.photo_set.all%}
+    <img class="card-img-top" src="{{ photo.image.url }}" alt=" Card image cap"><br>
+    {% endfor %}</p><!--blog 와 photo의 1대 다 관계를 맞추어주기 위해서 새로만든 모델인 photo와 쿼리셋문법인 그 set을 가져와서 설정-->
+    <p>{{blog_detail.description}}</p>
+    <p>{{blog_detail.body}}</p>
+    <a href="{%url 'home'%}">돌아가기</a>
+</div><!--이부분 이거 각 id에 맞는 키 페이지를 긁어온다는건 알겠는데.. 왜 url 페이지 뒤에 저렇게씀?? 양식?? -->
+<a href="{% url 'delete' blog_detail.id%}"><input type = "button" value ="삭제하기"></a>
+<a href="{% url 'update' blog_detail.id%}"><input type = "button" value ="수정하기"></a>
+
+ <form method="post" action="{% url 'create_comment' blog_detail.id%}">
+        {%csrf_token%}
+        {{comment_form}}
+        <input type="submit">
+    </form>
+
+    {% for i in blog_detail.comment_set.all %}
+
+    <p>-> {{i}} <a href="{% url 'delete_comment' i.id blog_detail.id %}">삭제</a></p><!--pk값이 blog.id인 object를 blog_detail로 가져와서 이렇게 써야함 위에도-->
+    <hr><!--form action 같은 경우는 데이터를 넘길 때 사용하고 이런 지우는거 같은경우엔 url만 사용해도 충분하다.-->
+    {%endfor%}
+
+</body>

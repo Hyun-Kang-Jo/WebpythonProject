@@ -1,0 +1,10 @@
+<form action ='{% url 'updateSend' blog_update.id %}'><!--''하기""말고.. 백으로 넘겨주는-->
+ 제목 :<input type = "text" value ={{blog_update.title}} name = "updateTitle"><!--여기서 이름지정이 VIEWS에서 덮어씌울 때 이용됨-->
+ <br>
+ <br>
+
+ 본문 : <br><textarea cols=40 rows="10" name="updatebody" >{{blog_update.body}}</textarea><!--VALUE에 들어가거나 TEXAREA에있는 내용 불러올때 이렇게 그냥 출력시는 이런거 없이 글로 출력-->
+ <br>
+
+ <input type ="submit" value = "수정하기">
+</form>
